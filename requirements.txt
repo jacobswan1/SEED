@@ -1,0 +1,6 @@
+django
+termcolor
+tqdm
+tensorboard
+tensorboardX
+PyYAML

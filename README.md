@@ -29,7 +29,7 @@ SEED improves the **ResNet-50** from **67.4%** to **74.3%** from the previous Mo
 ![image](https://user-images.githubusercontent.com/17426159/126872552-a2873b52-a901-435a-a6cc-b8bc1a4e3248.png)
 
 ## Preperation
-Note: This repository does not contain the ImageNet dataset building, please refer to [MoCo-V2](https://github.com/facebookresearch/moco) for the enviromental setting & dataset preparation. Be careful if you use FaceBook's ImageNet dataset implementation as the provided dataloader here is to handle TSV ImageNet source. R
+Note: This repository does not contain the ImageNet dataset building, please refer to [MoCo-V2](https://github.com/facebookresearch/moco) for the enviromental setting & dataset preparation. Be careful if you use FaceBook's ImageNet dataset implementation as the provided dataloader here is to handle TSV ImageNet source.
 
 ## Self-Supervised Distillation Training
 

@@ -33,27 +33,37 @@ Note: This repository does not contain the ImageNet dataset building, please ref
 
 ## Self-Supervised Distillation Training
 
-Distributed Training, one GPU on single Node: using [SWAV](https://github.com/facebookresearch/swav)'s 400_ep ResNet-50 model as Teacher architecture for a Student EfficientNet-b1 model with multi-view strategies. 
+[SWAV](https://github.com/facebookresearch/swav)'s 400_ep ResNet-50 model as Teacher architecture for a Student EfficientNet-b1 model with multi-view strategies. Place the pre-trained checkpoint in <pre><code>./output</code></pre> directory. Remember to change the parameter name in the checkpoint as some module provided by SimCLR, MoCo-V2 and SWAV are inconsistent with regular PyTorch implementations. 
+Here we provide the pre-trained SWAV/MoCo-V2/SimCLR Pre-trained checkpoint, but all credits belong to them.
+
+Attribute|               Model              | CIDER |   B1   |   B2   |   B3   |   B4   |   METEOR   |   ROUGE-L  | 
+---------|----------------------------------|-------|--------|--------|--------|--------|------------|------------|
+[URL](https://drive.google.com/drive/folders/1gQfVEFADWmMUxGCrFKJBrQxPSZ0zA325?usp=sharing)|     Attention + Video2Text       |   -   |  36.5  |     -  |    -   |     -  |       -    |       -    |
+[URL](https://drive.google.com/drive/folders/1rWj5VtwJHv2bnjT4arZhPm_ErYkEoVnW?usp=sharing)|    Transformer Encoder + Decoder |   -   |  40.7  |    -   |     -  |   -    |       -    |       -    |
+[URL](https://drive.google.com/drive/folders/1XMteYdtw0UXlqCnTKozkJR5WQbvtd1ba?usp=sharing)|     Video CMS Transformer        |   -   |  47.3  |     -  |    -   |     -  |       -    |       -    |
+
+To conduct the training one GPU on single Node using Distributed Training: 
 ```
 python -m torch.distributed.launch --nproc_per_node=1 main_small-patch.py \
        -a efficientnet_b1 \
        -k resnet50 \
        --teacher_ssl swav \
-       --distill /media/drive2/Unsupervised_Learning/moco_distill/output/swav_400ep_pretrain.pth.tar \
-       --lr 0.03 
-       --batch-size 16 
+       --distill ./output/swav_400ep_pretrain.pth.tar \
+       --lr 0.03 \
+       --batch-size 16 \
        --temp 0.2 \
-       --workers 4 --output ./output 
+       --workers 4 
+       --output ./output \
        --data [your TSV imagenet-folder with train folders]
 ```
 
 Conduct linear evaluations on ImageNet-val split:
 ```
 python -m torch.distributed.launch --nproc_per_node=1  main_lincls.py \
-       -a efficientnet_b0 
-       --lr 30 
-       --batch-size 32 
-       --output ./output 
+       -a efficientnet_b0 \
+       --lr 30 \
+       --batch-size 32 \
+       --output ./output \ 
        [your TSV imagenet-folder with val folders]
 ```
 
@@ -69,7 +79,7 @@ First row shows the supervised performances of student networks.
 
 ## Acknowledge
 This implementation is largely originated from: [MoCo-V2](https://github.com/facebookresearch/moco).
-Thanks [SWAV](https://github.com/facebookresearch/swav) for the pre-trained SSL checkpoints.
+Thanks [SWAV](https://github.com/facebookresearch/swav) and [SimCLR](https://github.com/google-research/simclr) for the pre-trained SSL checkpoints.
 
 This work is done jointly with [ASU-APG lab](https://yezhouyang.engineering.asu.edu/) and [Microsoft Azure-Florence Group](https://www.microsoft.com/en-us/research/project/azure-florence-vision-and-language). Thanks my collaborators.
 
